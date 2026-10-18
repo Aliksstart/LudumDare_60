@@ -13,12 +13,17 @@ public class UIGameTime : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text = GetComponent<TMP_Text>();
+        TextMeshProUGUI[] objs = GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (var obj in objs)
+        {
+            if (obj.name.Contains("Value"))
+                text = obj;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        text.text = $"Time: {gameTime.GetTime()}";
+        text.text = gameTime.GetTime();
     }
 }

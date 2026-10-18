@@ -14,11 +14,11 @@ public class UIGenerationValue : UIValueFloatConnected
     {
         float k = targer * concession;
         if (val == targer)
-            text.color = Ok;
+            TextValue.color = Ok;
         else if (val < targer - k || val > targer + k)
-            text.color = Err;
+            TextValue.color = Err;
         else
-            text.color = Warn;
+            TextValue.color = Warn;
         
         base.valueUpdate(val);
     }
