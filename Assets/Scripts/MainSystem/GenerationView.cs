@@ -31,7 +31,7 @@ public class GenerationView : HydraulicUnit
         Update();
         UpdateConnetedGrid(CurrentRPM, Power, IsConnectedGrid, idAgr);
     }
-    public float Update() {
+    public new float Update() {
         if (IsConnectedGrid)
         {
             CurrentRPM = 1.0f;
@@ -45,6 +45,6 @@ public class GenerationView : HydraulicUnit
 
         UpdateRPM(CurrentRPM, idAgr);
         UpdatePower(CurrentPower, MaxPower, idAgr);
-        return CommissioningHydroUnit * maxUnitFlowRate;
+        return base.Update();
     }
 }

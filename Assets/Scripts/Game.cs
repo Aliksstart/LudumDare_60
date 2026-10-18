@@ -15,8 +15,11 @@ public class Game : MonoBehaviour
     UIValueFloatConnected[] GenerationPower;
     [SerializeField]
     UIStateNetButton[] StateConnectedButton;
+    [SerializeField]
+    UIValueFloatConnected[] UIspillway;
 
     GenerationView[] GenerationViews;
+    SpillwayView[] spillway = new SpillwayView[3];
 
     private void ReservoirsUpdate(float Headwater, float Tailwater)
     {
@@ -43,11 +46,21 @@ public class Game : MonoBehaviour
         StateConnectedButton[id].UpdateStete(isConnected);
     }
 
-    // Start is called before the first frame update
+    private void SpillwayUpdate(float val, int id)
+    {
+        UIspillway[id].value = val;
+    }
+
     void Start()
     {
         reservoirs = new Reservoirs();
         reservoirs.Updated += ReservoirsUpdate;
+        for (int i = 0; i < 3; i++)
+        {
+            spillway[i] = new SpillwayView(i, UIspillway[i].maxValue);
+            UIspillway[i].maxValue = 0;
+            spillway[i].UpdateCommissioningHydroUnit += SpillwayUpdate;
+        }
         GenerationViews = new GenerationView[generation];
         for (int i = 0; i < generation; i++) { 
             GenerationViews[i] = new GenerationView(i);
@@ -59,21 +72,20 @@ public class Game : MonoBehaviour
         watherLevel.maxValue = 1800;
         watherLevel.value = 1400;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void FixedUpdate()
     {
         float hydraulicUnitFlowRate = 0;
+        float spillwayUnitFlowRate = 0;
         float dt = Time.fixedDeltaTime;
         for (int i = 0; i < generation; i++)
         {
             hydraulicUnitFlowRate += GenerationViews[i].Update();
         }
-        reservoirs.Update(hydraulicUnitFlowRate, 0, dt);
+        for (int i = 0; i < 3; i++)
+        {
+            spillwayUnitFlowRate += spillway[i].Update();
+        }
+        reservoirs.Update(hydraulicUnitFlowRate, spillwayUnitFlowRate, dt);
     }
     public void OpenGen(int gen)
     {
@@ -86,6 +98,18 @@ public class Game : MonoBehaviour
         if (gen >= generation)
             throw new UnityException();
         GenerationViews[gen].Shutdown();
+    }
+    public void OpenSpillway(int sw)
+    {
+        if (sw >= spillway.Length)
+            throw new UnityException();
+        spillway[sw].Commissionin();
+    }
+    public void ClosedSpillway(int sw)
+    {
+        if (sw >= spillway.Length)
+            throw new UnityException();
+        spillway[sw].Shutdown();
     }
     public void ConnectGeneratorButton(int gen)
     {

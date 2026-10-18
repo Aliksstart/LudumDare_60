@@ -25,4 +25,7 @@ public class HydraulicUnit
     {
         idAgr = id;
     }
+    protected float Update() {
+        return CommissioningHydroUnit * maxUnitFlowRate;
+    }
 }
