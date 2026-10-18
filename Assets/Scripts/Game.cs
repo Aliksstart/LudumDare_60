@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    private Reservoirs reservoirs;
     [SerializeField]
     private int generation = 2;
     [SerializeField]
@@ -16,6 +17,12 @@ public class Game : MonoBehaviour
     UIStateNetButton[] StateConnectedButton;
 
     GenerationView[] GenerationViews;
+
+    private void ReservoirsUpdate(float Headwater, float Tailwater)
+    {
+        watherLevel.value = Headwater;
+        watherLevel.maxValue = reservoirs.MaxHeadwater;
+    }
 
     private void UpdateGenerationCommissioningHydroUnit(float val, int id)
     {
@@ -39,6 +46,8 @@ public class Game : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        reservoirs = new Reservoirs();
+        reservoirs.Updated += ReservoirsUpdate;
         GenerationViews = new GenerationView[generation];
         for (int i = 0; i < generation; i++) { 
             GenerationViews[i] = new GenerationView(i);
@@ -54,10 +63,17 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+    private void FixedUpdate()
+    {
+        float hydraulicUnitFlowRate = 0;
+        float dt = Time.fixedDeltaTime;
         for (int i = 0; i < generation; i++)
         {
-            GenerationViews[i].Update();
+            hydraulicUnitFlowRate += GenerationViews[i].Update();
         }
+        reservoirs.Update(hydraulicUnitFlowRate, 0, dt);
     }
     public void OpenGen(int gen)
     {

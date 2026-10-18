@@ -10,11 +10,11 @@ public class UIValueFloatConnected : UIValueConnected
     {
         if (maxValue == 0.0f)
         {
-            return base.unitOfMeasurement == "%" ? (value * 100).ToString() : value.ToString();
+            return base.unitOfMeasurement == "%" ? (value * 100).ToString("0.00") : value.ToString("0.0");
         }
         else
         { 
-            return $"{value}/{maxValue}"; 
+            return $"{value:0.0}/{maxValue:0.0}"; 
         }
 
     }

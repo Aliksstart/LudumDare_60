@@ -1,10 +1,12 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GenerationView
 {
     private int idAgr = 0;
     private float stepButton = 0.05f;
+    private float maxUnitFlowRate = 250;
 
     // ----
     private float kPower = 0.015f;
@@ -47,7 +49,7 @@ public class GenerationView
         Update();
         UpdateConnetedGrid(CurrentRPM, Power, IsConnectedGrid, idAgr);
     }
-    public void Update() {
+    public float Update() {
         if (IsConnectedGrid)
         {
             CurrentRPM = 1.0f;
@@ -61,5 +63,6 @@ public class GenerationView
 
         UpdateRPM(CurrentRPM, idAgr);
         UpdatePower(CurrentPower, MaxPower, idAgr);
+        return CommissioningHydroUnit * maxUnitFlowRate;
     }
 }
