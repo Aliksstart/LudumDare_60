@@ -1,8 +1,14 @@
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
+    private bool gameActive;
+    [SerializeField]
+    private GameOverUIController UIGameOver;
+   
     private Reservoirs reservoirs;
     [SerializeField]
     private int generation = 2;
@@ -25,6 +31,11 @@ public class Game : MonoBehaviour
 
     GenerationView[] GenerationViews;
     SpillwayView[] spillway = new SpillwayView[3];
+
+    private void OnGameOver(string cause) {
+        gameActive = false;
+        UIGameOver.OnActivate(cause);
+    }
 
     private void ReservoirsUpdate(float Headwater, float Tailwater)
     {
@@ -62,15 +73,15 @@ public class Game : MonoBehaviour
         reservoirs.Updated += ReservoirsUpdate;
         for (int i = 0; i < 3; i++)
         {
-            spillway[i] = !openSpillway.IsUnityNull() && i < openSpillway.Length ? 
+            spillway[i] = !openSpillway.IsUnityNull() && i < openSpillway.Length ?
                 new SpillwayView(i, UIspillway[i].maxValue, openSpillway[i]) : new SpillwayView(i, UIspillway[i].maxValue);
             UIspillway[i].maxValue = 0;
             spillway[i].UpdateCommissioningHydroUnit += SpillwayUpdate;
             spillway[i].ForceUpdateValue();
         }
         GenerationViews = new GenerationView[generation];
-        for (int i = 0; i < generation; i++) { 
-            GenerationViews[i] = !openGenerations.IsUnityNull() && i < openGenerations.Length ? 
+        for (int i = 0; i < generation; i++) {
+            GenerationViews[i] = !openGenerations.IsUnityNull() && i < openGenerations.Length ?
                 new GenerationView(i, openGenerations[i]) : new GenerationView(i);
             GenerationViews[i].UpdateCommissioningHydroUnit += UpdateGenerationCommissioningHydroUnit;
             GenerationViews[i].UpdateRPM += UpdateRPMHydroUnit;
@@ -80,21 +91,28 @@ public class Game : MonoBehaviour
         }
         watherLevel.maxValue = 1800;
         watherLevel.value = 1400;
+        gameActive = true;
     }
     private void FixedUpdate()
     {
-        float hydraulicUnitFlowRate = 0;
-        float spillwayUnitFlowRate = 0;
-        float dt = Time.fixedDeltaTime;
-        for (int i = 0; i < generation; i++)
+        if (gameActive)
         {
-            hydraulicUnitFlowRate += GenerationViews[i].Update();
+            float hydraulicUnitFlowRate = 0;
+            float spillwayUnitFlowRate = 0;
+            float dt = Time.fixedDeltaTime;
+            for (int i = 0; i < generation; i++)
+            {
+                hydraulicUnitFlowRate += GenerationViews[i].Update();
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                spillwayUnitFlowRate += spillway[i].Update();
+            }
+            reservoirs.Update(hydraulicUnitFlowRate, spillwayUnitFlowRate, dt);
+            if (reservoirs.IsOverflow) OnGameOver("The dam was washed away.");
+
+            if (reservoirs.IsUnderfilling) OnGameOver("The headwater has been drained.");
         }
-        for (int i = 0; i < 3; i++)
-        {
-            spillwayUnitFlowRate += spillway[i].Update();
-        }
-        reservoirs.Update(hydraulicUnitFlowRate, spillwayUnitFlowRate, dt);
     }
     public void OpenGen(int gen)
     {
@@ -128,5 +146,8 @@ public class Game : MonoBehaviour
             GenerationViews[gen].DisconnectionGen();
         else
             GenerationViews[gen].ConnectionGen();
+    }
+    public void RestartScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

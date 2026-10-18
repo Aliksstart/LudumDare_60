@@ -15,6 +15,16 @@ public class Reservoirs
     private float OutFlow = 150;
 
     public Action<float, float> Updated;
+    public bool IsOverflow {
+        get {
+            return CurrentHeadwater > MaxHeadwater;
+        }
+    }
+    public bool IsUnderfilling {
+        get {
+            return CurrentHeadwater < MinHeadwater;
+        }
+    }
     public void Update(float hydraulicUnitFlowRate, float dischargeFlowRate, float dt)
     {
         float totalOut = hydraulicUnitFlowRate + dischargeFlowRate;
