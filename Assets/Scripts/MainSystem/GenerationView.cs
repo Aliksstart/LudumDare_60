@@ -14,7 +14,7 @@ public class GenerationView : HydraulicUnit
     private float MaxRPM = 1.3f;
     public float CurrentRPM { get; private set; }
     public Action<float, int> UpdateRPM;
-    public GenerationView(int id) : base(id)
+    public GenerationView(int id, float cur = 0.0f) : base(id, cur)
     {
         maxUnitFlowRate = 250;
         IsConnectedGrid = false;

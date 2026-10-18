@@ -2,7 +2,7 @@ using System;
 
 public class SpillwayView : HydraulicUnit
 {
-    public SpillwayView(int id, float max = 750) : base(id)
+    public SpillwayView(int id, float max = 750, float cur = 0.0f) : base(id, cur)
     {
         maxUnitFlowRate = max;
     }

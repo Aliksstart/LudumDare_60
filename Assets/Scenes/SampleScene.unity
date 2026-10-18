@@ -3337,6 +3337,12 @@ MonoBehaviour:
   - {fileID: 1981910164}
   - {fileID: 52791053}
   - {fileID: 742800846}
+  openGenerations:
+  - 0.2
+  - 0.2
+  openSpillway:
+  - 0.1
+  - 0.8
 --- !u!1 &973343147
 GameObject:
   m_ObjectHideFlags: 0

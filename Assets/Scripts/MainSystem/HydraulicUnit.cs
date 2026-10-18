@@ -21,11 +21,16 @@ public class HydraulicUnit
         CommissioningHydroUnit = x < 0.0f ? 0.0f : x;
         UpdateCommissioningHydroUnit(CommissioningHydroUnit, idAgr);
     }
-    public HydraulicUnit(int id)
+    public HydraulicUnit(int id, float open = 0.0f)
     {
         idAgr = id;
+        CommissioningHydroUnit = open;
     }
     protected float Update() {
         return CommissioningHydroUnit * maxUnitFlowRate;
+    }
+    public virtual void ForceUpdateValue()
+    {
+        UpdateCommissioningHydroUnit(CommissioningHydroUnit, idAgr);
     }
 }

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -17,6 +18,10 @@ public class Game : MonoBehaviour
     UIStateNetButton[] StateConnectedButton;
     [SerializeField]
     UIValueFloatConnected[] UIspillway;
+    [SerializeField]
+    private float[] openGenerations;
+    [SerializeField]
+    private float[] openSpillway;
 
     GenerationView[] GenerationViews;
     SpillwayView[] spillway = new SpillwayView[3];
@@ -57,17 +62,21 @@ public class Game : MonoBehaviour
         reservoirs.Updated += ReservoirsUpdate;
         for (int i = 0; i < 3; i++)
         {
-            spillway[i] = new SpillwayView(i, UIspillway[i].maxValue);
+            spillway[i] = !openSpillway.IsUnityNull() && i < openSpillway.Length ? 
+                new SpillwayView(i, UIspillway[i].maxValue, openSpillway[i]) : new SpillwayView(i, UIspillway[i].maxValue);
             UIspillway[i].maxValue = 0;
             spillway[i].UpdateCommissioningHydroUnit += SpillwayUpdate;
+            spillway[i].ForceUpdateValue();
         }
         GenerationViews = new GenerationView[generation];
         for (int i = 0; i < generation; i++) { 
-            GenerationViews[i] = new GenerationView(i);
+            GenerationViews[i] = !openGenerations.IsUnityNull() && i < openGenerations.Length ? 
+                new GenerationView(i, openGenerations[i]) : new GenerationView(i);
             GenerationViews[i].UpdateCommissioningHydroUnit += UpdateGenerationCommissioningHydroUnit;
             GenerationViews[i].UpdateRPM += UpdateRPMHydroUnit;
             GenerationViews[i].UpdatePower += UpdatePowerHydroUnit;
             GenerationViews[i].UpdateConnetedGrid += UpdateConnectToGridHydroUnit;
+            GenerationViews[i].ForceUpdateValue();
         }
         watherLevel.maxValue = 1800;
         watherLevel.value = 1400;
