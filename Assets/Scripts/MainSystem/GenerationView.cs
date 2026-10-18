@@ -17,7 +17,7 @@ public class GenerationView : HydraulicUnit
     public GenerationView(int id, float cur = 0.0f) : base(id, cur)
     {
         maxUnitFlowRate = 250;
-        IsConnectedGrid = false;
+        IsConnectedGrid = cur > 0.0f ? true : false;
     }
     public void ConnectionGen() {
         IsConnectedGrid = true;

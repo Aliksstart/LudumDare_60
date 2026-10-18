@@ -112,6 +112,7 @@ public class Game : MonoBehaviour
         ActiiveTask = new()
         {
             Concession = 0.05f,
+            TargetGeneration = 160,
             StartInternalTime = 6,
             EndInternalTime = 7
         };

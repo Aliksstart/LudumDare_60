@@ -3629,7 +3629,7 @@ MonoBehaviour:
       remark: The hydroelectric power plant dispatcher is listening
     - Speaking: 1
       remark: Good morning, increase output to 380 MW by 8 a.m.
-  - TargetGeneration: 800
+  - TargetGeneration: 560
     Concession: 0.05
     StartInternalTime: 9
     EndInternalTime: 9.5
@@ -3637,8 +3637,8 @@ MonoBehaviour:
     - Speaking: 0
       remark: The hydroelectric power plant dispatcher is listening
     - Speaking: 1
-      remark: "We\u2019re heading into a morning peak; we need all 800 MW from you."
-  - TargetGeneration: 500
+      remark: "We\u2019re heading into a morning peak; we need all 560 MW from you."
+  - TargetGeneration: 560
     Concession: 0.05
     StartInternalTime: 11
     EndInternalTime: 12
@@ -3646,7 +3646,7 @@ MonoBehaviour:
     - Speaking: 0
       remark: The hydroelectric power plant dispatcher is listening
     - Speaking: 1
-      remark: Reduce power to 500
+      remark: Reduce power to 560
   - TargetGeneration: 200
     Concession: 0.05
     StartInternalTime: 14
@@ -3656,7 +3656,7 @@ MonoBehaviour:
       remark: The hydroelectric power plant dispatcher is listening
     - Speaking: 1
       remark: Get 200 MW urgently
-  - TargetGeneration: 700
+  - TargetGeneration: 460
     Concession: 0.05
     StartInternalTime: 18
     EndInternalTime: 19
@@ -3664,7 +3664,7 @@ MonoBehaviour:
     - Speaking: 0
       remark: The hydroelectric power plant dispatcher is listening
     - Speaking: 1
-      remark: Good evening, dial 700 MW
+      remark: Good evening, dial 460 MW
   gameTime: {fileID: 963194230}
 --- !u!114 &963194230
 MonoBehaviour:
@@ -4619,9 +4619,9 @@ MonoBehaviour:
   unitOfMeasurement: MW
   value: 0
   maxValue: 0
-  Ok: {r: 0.08726415, g: 0.3490566, b: 0.095706, a: 0}
-  Warn: {r: 0.3679245, g: 0.29296005, b: 0.08851013, a: 0}
-  Err: {r: 0.735849, g: 0.23949803, b: 0.23949803, a: 0}
+  Ok: {r: 0.08726415, g: 0.3490566, b: 0.095706, a: 1}
+  Warn: {r: 0.3679245, g: 0.29296005, b: 0.08851013, a: 1}
+  Err: {r: 0.735849, g: 0.23949803, b: 0.23949803, a: 1}
 --- !u!1 &1084846215
 GameObject:
   m_ObjectHideFlags: 0
