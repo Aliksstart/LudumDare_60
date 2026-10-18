@@ -3599,6 +3599,52 @@ MonoBehaviour:
   openSpillway:
   - 0.1
   - 0.8
+  PoolTasks:
+  - TargetGeneration: 380
+    Concession: 0.05
+    StartInternalTime: 7
+    EndInternalTime: 8
+    startDialog:
+    - Speaking: 0
+      remark: The hydroelectric power plant dispatcher is listening
+    - Speaking: 1
+      remark: Good morning, increase output to 380 MW by 8 a.m.
+  - TargetGeneration: 800
+    Concession: 0.05
+    StartInternalTime: 9
+    EndInternalTime: 9.5
+    startDialog:
+    - Speaking: 0
+      remark: The hydroelectric power plant dispatcher is listening
+    - Speaking: 1
+      remark: "We\u2019re heading into a morning peak; we need all 800 MW from you."
+  - TargetGeneration: 500
+    Concession: 0.05
+    StartInternalTime: 11
+    EndInternalTime: 12
+    startDialog:
+    - Speaking: 0
+      remark: The hydroelectric power plant dispatcher is listening
+    - Speaking: 1
+      remark: Reduce power to 500
+  - TargetGeneration: 200
+    Concession: 0.05
+    StartInternalTime: 14
+    EndInternalTime: 15
+    startDialog:
+    - Speaking: 0
+      remark: The hydroelectric power plant dispatcher is listening
+    - Speaking: 1
+      remark: Get 200 MW urgently
+  - TargetGeneration: 700
+    Concession: 0.05
+    StartInternalTime: 18
+    EndInternalTime: 19
+    startDialog:
+    - Speaking: 0
+      remark: The hydroelectric power plant dispatcher is listening
+    - Speaking: 1
+      remark: Good evening, dial 700 MW
 --- !u!1 &973343147
 GameObject:
   m_ObjectHideFlags: 0

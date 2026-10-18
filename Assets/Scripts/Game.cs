@@ -29,6 +29,11 @@ public class Game : MonoBehaviour
     [SerializeField]
     private float[] openSpillway;
 
+    [Header("Tasks")]
+    [SerializeField]
+    private Task[] PoolTasks;
+    private Task ActiiveTask;
+
     GenerationView[] GenerationViews;
     SpillwayView[] spillway = new SpillwayView[3];
 
