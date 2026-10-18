@@ -1,7 +1,7 @@
 using System;
 
 [Serializable]
-public class Task 
+public class TaskGame
 {
     //[SerializeField]
     //public bool isHidenTask { get; }

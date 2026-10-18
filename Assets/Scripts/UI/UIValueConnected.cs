@@ -4,8 +4,8 @@ using UnityEngine;
 public abstract class UIValueConnected : MonoBehaviour
 {
     [SerializeField]
-    private string name;
-    private TMP_Text text;
+    private string nameP;
+    protected TMP_Text text;
     protected object value;
     protected object maxValue;
     [SerializeField]
@@ -18,6 +18,6 @@ public abstract class UIValueConnected : MonoBehaviour
     }
     private void Update()
     {
-        text.text = $"{name}: {Formatter()} {unitOfMeasurement}";
+        text.text = $"{nameP}: {Formatter()} {unitOfMeasurement}";
     }
 }

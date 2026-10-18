@@ -14,6 +14,7 @@ public class Game : MonoBehaviour
     private int generation = 2;
     [SerializeField]
     UIValueFloatConnected watherLevel;
+    [Header("Generations")]
     [SerializeField]
     UIValueFloatConnected[] GenerationCommissioningHydroUnit;
     [SerializeField]
@@ -23,16 +24,24 @@ public class Game : MonoBehaviour
     [SerializeField]
     UIStateNetButton[] StateConnectedButton;
     [SerializeField]
-    UIValueFloatConnected[] UIspillway;
-    [SerializeField]
     private float[] openGenerations;
+    [SerializeField]
+    private UIGenerationValue UITotalGeneration;
+    [SerializeField]
+    private UIValueFloatConnected UITargetGeneration;
+    [Header("Spillway")]
+    [SerializeField]
+    UIValueFloatConnected[] UIspillway;
     [SerializeField]
     private float[] openSpillway;
 
     [Header("Tasks")]
     [SerializeField]
-    private Task[] PoolTasks;
-    private Task ActiiveTask;
+    private TaskGame[] PoolTasks;
+    private TaskGame ActiiveTask;
+
+    [SerializeField]
+    GameTime gameTime;
 
     GenerationView[] GenerationViews;
     SpillwayView[] spillway = new SpillwayView[3];
@@ -40,6 +49,10 @@ public class Game : MonoBehaviour
     private void OnGameOver(string cause) {
         gameActive = false;
         UIGameOver.OnActivate(cause);
+    }
+    private void OnGameVicroy()
+    {
+        gameActive = true;
     }
 
     private void ReservoirsUpdate(float Headwater, float Tailwater)
@@ -96,7 +109,14 @@ public class Game : MonoBehaviour
         }
         watherLevel.maxValue = 1800;
         watherLevel.value = 1400;
+        ActiiveTask = new()
+        {
+            Concession = 0.05f,
+            StartInternalTime = 6,
+            EndInternalTime = 7
+        };
         gameActive = true;
+        
     }
     private void FixedUpdate()
     {
@@ -105,9 +125,11 @@ public class Game : MonoBehaviour
             float hydraulicUnitFlowRate = 0;
             float spillwayUnitFlowRate = 0;
             float dt = Time.fixedDeltaTime;
+            float summarryPower = 0;
             for (int i = 0; i < generation; i++)
             {
                 hydraulicUnitFlowRate += GenerationViews[i].Update();
+                summarryPower += GenerationViews[i].CurrentPower;
             }
             for (int i = 0; i < 3; i++)
             {
@@ -117,6 +139,36 @@ public class Game : MonoBehaviour
             if (reservoirs.IsOverflow) OnGameOver("The dam was washed away.");
 
             if (reservoirs.IsUnderfilling) OnGameOver("The headwater has been drained.");
+
+            TaskGame newTask = null;
+            int h = gameTime.Hours;
+
+            for (int i = 0; i < PoolTasks.Length; i++) {
+                if (h >= PoolTasks[i].StartInternalTime  && h <= PoolTasks[i].EndInternalTime && ActiiveTask != PoolTasks[i]) {
+                    newTask = PoolTasks[i];
+                    break;
+                }
+            }
+            if (ActiiveTask.IsUnityNull())
+            {
+                ActiiveTask = newTask;
+                UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            }
+            else
+            {
+                if (h >= ActiiveTask.EndInternalTime)
+                {
+                    float k = ActiiveTask.TargetGeneration * ActiiveTask.Concession;
+                    if (summarryPower < ActiiveTask.TargetGeneration - k || summarryPower > ActiiveTask.TargetGeneration + k)
+                    {
+                        OnGameOver("You ignored the dispatcher's instructions.");
+                    }
+                    if (newTask != null)
+                        ActiiveTask = newTask;
+                }
+                UITotalGeneration.valueUpdate(summarryPower, ActiiveTask.TargetGeneration, ActiiveTask.Concession);
+                UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            }
         }
     }
     public void OpenGen(int gen)
