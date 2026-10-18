@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -98,7 +96,7 @@ public class Game : MonoBehaviour
         reservoirs.Updated += ReservoirsUpdate;
         for (int i = 0; i < 3; i++)
         {
-            spillway[i] = !openSpillway.IsUnityNull() && i < openSpillway.Length ?
+            spillway[i] = (openSpillway != null && i < openSpillway.Length) ?
                 new SpillwayView(i, UIspillway[i].maxValue, openSpillway[i]) : new SpillwayView(i, UIspillway[i].maxValue);
             UIspillway[i].maxValue = 0;
             spillway[i].UpdateCommissioningHydroUnit += SpillwayUpdate;
@@ -106,7 +104,7 @@ public class Game : MonoBehaviour
         }
         GenerationViews = new GenerationView[generation];
         for (int i = 0; i < generation; i++) {
-            GenerationViews[i] = !openGenerations.IsUnityNull() && i < openGenerations.Length ?
+            GenerationViews[i] = (openGenerations != null && i < openGenerations.Length) ?
                 new GenerationView(i, openGenerations[i]) : new GenerationView(i);
             GenerationViews[i].UpdateCommissioningHydroUnit += UpdateGenerationCommissioningHydroUnit;
             GenerationViews[i].UpdateRPM += UpdateRPMHydroUnit;
@@ -157,7 +155,7 @@ public class Game : MonoBehaviour
                     break;
                 }
             }
-            if (ActiiveTask.IsUnityNull())
+            if (ActiiveTask == null)
             {
                 ActiiveTask = newTask;
                 UITargetGeneration.value = ActiiveTask.TargetGeneration;
