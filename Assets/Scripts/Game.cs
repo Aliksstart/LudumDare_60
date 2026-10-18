@@ -8,6 +8,8 @@ public class Game : MonoBehaviour
     private bool gameActive;
     [SerializeField]
     private GameOverUIController UIGameOver;
+    [SerializeField]
+    private UIPlaineHandler UIGameWin;
    
     private Reservoirs reservoirs;
     [SerializeField]
@@ -39,6 +41,8 @@ public class Game : MonoBehaviour
     [SerializeField]
     private TaskGame[] PoolTasks;
     private TaskGame ActiiveTask;
+    [SerializeField]
+    private int EndShift = 8;
 
     [SerializeField]
     GameTime gameTime;
@@ -48,11 +52,14 @@ public class Game : MonoBehaviour
 
     private void OnGameOver(string cause) {
         gameActive = false;
+        gameTime.StopTime();
         UIGameOver.OnActivate(cause);
     }
     private void OnGameVicroy()
     {
-        gameActive = true;
+        gameActive = false;
+        gameTime.StopTime();
+        UIGameWin.ForceActivate();
     }
 
     private void ReservoirsUpdate(float Headwater, float Tailwater)
@@ -169,6 +176,10 @@ public class Game : MonoBehaviour
                 }
                 UITotalGeneration.valueUpdate(summarryPower, ActiiveTask.TargetGeneration, ActiiveTask.Concession);
                 UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            }
+            if (h >= EndShift)
+            {
+                OnGameVicroy();
             }
         }
     }

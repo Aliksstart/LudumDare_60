@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameTime : MonoBehaviour
 {
+    private bool stopedTime;
     [SerializeField]
     private int _hours;
     public int Hours {
@@ -22,6 +23,14 @@ public class GameTime : MonoBehaviour
     {
         return _hours + ":" + (60 * FractionsHour).ToString("00") + " " + (IsPm ? "pm" : "am");
     }
+    public void StopTime()
+    {
+        stopedTime = true;
+    }
+    public void StartTime()
+    {
+        stopedTime = false;
+    }
     void Start()
     {
         IsPm = false;
@@ -32,15 +41,18 @@ public class GameTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FractionsHour += SpeedTime * Time.deltaTime;
-        while (FractionsHour >= 1f)
+        if (!stopedTime)
         {
-            FractionsHour -= 1f;
-            _hours++;
-            if (_hours >= 12)
+            FractionsHour += SpeedTime * Time.deltaTime;
+            while (FractionsHour >= 1f)
             {
-                _hours = 0;
-                IsPm = !IsPm;
+                FractionsHour -= 1f;
+                _hours++;
+                if (_hours >= 12)
+                {
+                    _hours = 0;
+                    IsPm = !IsPm;
+                }
             }
         }
     }
