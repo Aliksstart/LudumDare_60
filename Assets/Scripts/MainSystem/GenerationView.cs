@@ -1,41 +1,23 @@
 using System;
-using Unity.VisualScripting;
-using UnityEngine;
 
-public class GenerationView
+public class GenerationView : HydraulicUnit
 {
-    private int idAgr = 0;
-    private float stepButton = 0.05f;
-    private float maxUnitFlowRate = 250;
-
     // ----
     private float kPower = 0.015f;
     private float kRPM = 3f;
     // ----
     public bool IsConnectedGrid { get; private set; }
     public Action<float, float, bool, int> UpdateConnetedGrid;
-    public float CommissioningHydroUnit{ get; private set ;}
-    public Action<float, int> UpdateCommissioningHydroUnit;
-    public void Commissionin() {
-        float x = CommissioningHydroUnit + stepButton;
-        CommissioningHydroUnit = x > 1.0f ? 1.0f : x;
-        UpdateCommissioningHydroUnit(CommissioningHydroUnit, idAgr);
-    }
-    public void Shutdown() {
-        float x = CommissioningHydroUnit - stepButton;
-        CommissioningHydroUnit = x < 0.0f ? 0.0f : x;
-        UpdateCommissioningHydroUnit(CommissioningHydroUnit, idAgr);
-    }
     private float MaxPower = 400;
     public float CurrentPower { get; private set; }
     public Action<float, float, int> UpdatePower;
     private float MaxRPM = 1.3f;
     public float CurrentRPM { get; private set; }
     public Action<float, int> UpdateRPM;
-    public GenerationView(int id)
+    public GenerationView(int id) : base(id)
     {
+        maxUnitFlowRate = 250;
         IsConnectedGrid = false;
-        idAgr = id;
     }
     public void ConnectionGen() {
         IsConnectedGrid = true;
