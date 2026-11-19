@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameTime : MonoBehaviour
 {
+    public bool slowTime;
     private bool stopedTime;
     [SerializeField]
     private int _hours;
@@ -18,6 +18,7 @@ public class GameTime : MonoBehaviour
     public bool IsPm { get; private set; }
     [SerializeField]
     private float SpeedTime;
+    public float DeltaTime { get; private set; }
 
     public string GetTime()
     {
@@ -33,17 +34,18 @@ public class GameTime : MonoBehaviour
     }
     void Start()
     {
+        slowTime = false;
         IsPm = false;
         _hours = 6;
         FractionsHour = 0.5f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!stopedTime)
         {
-            FractionsHour += SpeedTime * Time.deltaTime;
+            DeltaTime = slowTime ? 0.01f * SpeedTime * Time.fixedDeltaTime : SpeedTime * Time.fixedDeltaTime;
+            FractionsHour += DeltaTime;
             while (FractionsHour >= 1f)
             {
                 FractionsHour -= 1f;
@@ -54,6 +56,10 @@ public class GameTime : MonoBehaviour
                     IsPm = !IsPm;
                 }
             }
+        }
+        else
+        {
+            DeltaTime = 0;
         }
     }
 }

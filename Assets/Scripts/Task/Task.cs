@@ -10,6 +10,7 @@ public class TaskGame
     public float StartInternalTime;
     public float EndInternalTime;
     public RemarkDialog[] startDialog;
+    public bool CompletedDialog;
     //[SerializeField]
     //private RemarkDialog stopDialog;
 

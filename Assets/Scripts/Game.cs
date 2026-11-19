@@ -45,6 +45,9 @@ public class Game : MonoBehaviour
     [SerializeField]
     GameTime gameTime;
 
+    [SerializeField]
+    DialogViewPanel dialogViewPanel;
+
     GenerationView[] GenerationViews;
     SpillwayView[] spillway = new SpillwayView[3];
 
@@ -119,7 +122,8 @@ public class Game : MonoBehaviour
             Concession = 0.05f,
             TargetGeneration = 160,
             StartInternalTime = 6,
-            EndInternalTime = 7
+            EndInternalTime = 7,
+            CompletedDialog = true
         };
         gameActive = true;
         
@@ -130,7 +134,7 @@ public class Game : MonoBehaviour
         {
             float hydraulicUnitFlowRate = 0;
             float spillwayUnitFlowRate = 0;
-            float dt = Time.fixedDeltaTime;
+            float dt = gameTime.DeltaTime;
             float summarryPower = 0;
             for (int i = 0; i < generation; i++)
             {
@@ -146,39 +150,7 @@ public class Game : MonoBehaviour
 
             if (reservoirs.IsUnderfilling) OnGameOver("The headwater has been drained.");
 
-            TaskGame newTask = null;
-            int h = gameTime.Hours;
-
-            for (int i = 0; i < PoolTasks.Length; i++) {
-                if (h >= PoolTasks[i].StartInternalTime  && h <= PoolTasks[i].EndInternalTime && ActiiveTask != PoolTasks[i]) {
-                    newTask = PoolTasks[i];
-                    break;
-                }
-            }
-            if (ActiiveTask == null)
-            {
-                ActiiveTask = newTask;
-                UITargetGeneration.value = ActiiveTask.TargetGeneration;
-            }
-            else
-            {
-                if (h >= ActiiveTask.EndInternalTime)
-                {
-                    float k = ActiiveTask.TargetGeneration * ActiiveTask.Concession;
-                    if (summarryPower < ActiiveTask.TargetGeneration - k || summarryPower > ActiiveTask.TargetGeneration + k)
-                    {
-                        OnGameOver("You ignored the dispatcher's instructions.");
-                    }
-                    if (newTask != null)
-                        ActiiveTask = newTask;
-                }
-                UITotalGeneration.valueUpdate(summarryPower, ActiiveTask.TargetGeneration, ActiiveTask.Concession);
-                UITargetGeneration.value = ActiiveTask.TargetGeneration;
-            }
-            if (h >= EndShift)
-            {
-                OnGameVicroy();
-            }
+            TaskUpdate(summarryPower);
         }
     }
     public void OpenGen(int gen)
@@ -216,5 +188,53 @@ public class Game : MonoBehaviour
     }
     public void RestartScene() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    private void TaskUpdate(float summarryPower)
+    {
+        TaskGame newTask = null;
+        int h = gameTime.Hours;
+
+        for (int i = 0; i < PoolTasks.Length; i++)
+        {
+            if (h >= PoolTasks[i].StartInternalTime && h <= PoolTasks[i].EndInternalTime && ActiiveTask != PoolTasks[i])
+            {
+                newTask = PoolTasks[i];
+                break;
+            }
+        }
+        if (ActiiveTask == null)
+        {
+            ActiiveTask = newTask;
+            UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            if (ActiiveTask.startDialog != null && ActiiveTask.startDialog.Length != 0)
+            {
+                dialogViewPanel.OpenDialog(ActiiveTask);
+                gameTime.slowTime = !ActiiveTask.CompletedDialog;
+            }
+        }
+        else
+        {
+            if (h >= ActiiveTask.EndInternalTime)
+            {
+                float k = ActiiveTask.TargetGeneration * ActiiveTask.Concession;
+                if (summarryPower < ActiiveTask.TargetGeneration - k || summarryPower > ActiiveTask.TargetGeneration + k)
+                {
+                    OnGameOver("You ignored the dispatcher's instructions.");
+                }
+                if (newTask != null)
+                    ActiiveTask = newTask;
+            }
+            UITotalGeneration.valueUpdate(summarryPower, ActiiveTask.TargetGeneration, ActiiveTask.Concession);
+            UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            if (ActiiveTask.startDialog != null && ActiiveTask.startDialog.Length != 0)
+            {
+                dialogViewPanel.OpenDialog(ActiiveTask);
+                gameTime.slowTime = !ActiiveTask.CompletedDialog;
+            }
+        }
+        if (h >= EndShift)
+        {
+            OnGameVicroy();
+        }
     }
 }
