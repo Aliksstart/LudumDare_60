@@ -125,6 +125,7 @@ public class Game : MonoBehaviour
             EndInternalTime = 7,
             CompletedDialog = true
         };
+        UITargetGeneration.value = ActiiveTask.TargetGeneration;
         gameActive = true;
         
     }
@@ -205,9 +206,9 @@ public class Game : MonoBehaviour
         if (ActiiveTask == null)
         {
             ActiiveTask = newTask;
-            UITargetGeneration.value = ActiiveTask.TargetGeneration;
             if (ActiiveTask.startDialog != null && ActiiveTask.startDialog.Length != 0)
             {
+                UITargetGeneration.valueUpdate(ActiiveTask.TargetGeneration);
                 dialogViewPanel.OpenDialog(ActiiveTask);
                 gameTime.slowTime = !ActiiveTask.CompletedDialog;
             }
@@ -225,9 +226,10 @@ public class Game : MonoBehaviour
                     ActiiveTask = newTask;
             }
             UITotalGeneration.valueUpdate(summarryPower, ActiiveTask.TargetGeneration, ActiiveTask.Concession);
-            UITargetGeneration.value = ActiiveTask.TargetGeneration;
+            
             if (ActiiveTask.startDialog != null && ActiiveTask.startDialog.Length != 0)
             {
+                UITargetGeneration.valueUpdate(ActiiveTask.TargetGeneration);
                 dialogViewPanel.OpenDialog(ActiiveTask);
                 gameTime.slowTime = !ActiiveTask.CompletedDialog;
             }

@@ -2978,7 +2978,7 @@ GameObject:
   - component: {fileID: 695163133}
   - component: {fileID: 695163135}
   - component: {fileID: 695163134}
-  - component: {fileID: 695163136}
+  - component: {fileID: 695163137}
   m_Layer: 5
   m_Name: Generation_task
   m_TagString: Untagged
@@ -3104,7 +3104,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695163132}
   m_CullTransparentMesh: 1
---- !u!114 &695163136
+--- !u!114 &695163137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3113,18 +3113,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 695163132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f761b02471b8ab4ab5d37a70703f39a, type: 3}
+  m_Script: {fileID: 11500000, guid: 19f53561b9a531f43a20dad92a8513f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameP: Generation task
   unitOfMeasurement: MW
-  TextValue: {fileID: 0}
-  TextMeasurement: {fileID: 0}
+  TextValue: {fileID: 1674886132}
+  TextMeasurement: {fileID: 909690072}
   TextValuePosition: {x: -105, y: -130}
   TextMeasurementPosition: {x: 30, y: -45}
   TextMeasurementSize: {x: 70, y: 50}
   value: 0
   maxValue: 0
+  blinkDuration: 4
+  blinkInterval: 0.5
+  signalColor: {r: 0.49056602, g: 0.15583521, b: 0.016197944, a: 1}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -4815,7 +4818,7 @@ MonoBehaviour:
   - 0.2
   - 0.2
   UITotalGeneration: {fileID: 1060747278}
-  UITargetGeneration: {fileID: 695163136}
+  UITargetGeneration: {fileID: 695163137}
   UIspillway:
   - {fileID: 1981910164}
   - {fileID: 52791053}

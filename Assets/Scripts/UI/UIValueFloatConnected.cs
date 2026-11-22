@@ -6,6 +6,10 @@ public class UIValueFloatConnected : UIValueConnected
 {
     public new float value;
     public new float maxValue;
+    public override void Start() 
+    {
+        base.Start();
+    }
     protected override string Formatter()
     {
         if (maxValue == 0.0f)
@@ -19,7 +23,7 @@ public class UIValueFloatConnected : UIValueConnected
 
     }
 
-    protected override void valueUpdate(float val)
+    public override void valueUpdate(float val)
     {
         value = val;
     }

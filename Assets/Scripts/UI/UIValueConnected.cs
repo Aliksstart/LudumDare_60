@@ -24,8 +24,8 @@ public abstract class UIValueConnected : MonoBehaviour
     [SerializeField]
     private Vector2 TextMeasurementSize = new Vector2(10f, 50f);
     protected abstract string Formatter();
-    protected abstract void valueUpdate(float val);
-    public void Start()
+    public abstract void valueUpdate(float val);
+    public virtual void Start()
     {
         text = GetComponent<TMP_Text>();
 
